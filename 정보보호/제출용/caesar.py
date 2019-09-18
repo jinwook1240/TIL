@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+MAX_KEY_SIZE = 26
 
 def getMode():
  while True:
@@ -16,13 +17,10 @@ def getFileName():
 def getKey():
  key = 0
  while True:
-  print('Enter the key (alphabet string type)')
-  key=input().lower()
-  valid = True
-  for character in key:
-   if not (ord(character) >= ord('a') and ord(character) <= ord('z')):
-     return
-  return key
+  print('Enter the key number (1-%s)' % (MAX_KEY_SIZE))
+  key=int(input())
+  if(key>=1 and key <= MAX_KEY_SIZE):
+   return key
 
 def shift(symbol, key):
  shifted = 0
@@ -41,22 +39,17 @@ def shift(symbol, key):
  return chr(shifted)
 
 def encrypt(mode, fileName, key):
- key_int = []
- for idx, keysymbol in enumerate(key):
-  tmp = ord(keysymbol)-ord('a')
-  if mode[0] is 'd':
-   tmp = -tmp
-  key_int.append(tmp)
  outputFileName = 'encrypt.txt'
  if mode[0] is 'd':
+  key = -key
   outputFileName = 'decrypt.txt'
  translated = ''
  outputFile = open(outputFileName, 'w')
  inputFile = open(fileName, 'r')
  message = inputFile.read()
  
- for idx, symbol in enumerate(message):
-  translated += shift(symbol, key_int[idx%len(key_int)])
+ for symbol in message:
+  translated += shift(symbol, key)
  
  outputFile.write(translated)
  outputFile.close()
